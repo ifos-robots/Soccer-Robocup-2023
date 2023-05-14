@@ -1,3 +1,6 @@
+#include "Motor.h"
+#include "Arduino.h"
+
 void setupPins(const int motor[]){
         for (int i = 0; i < 2; i++){
           pinMode(motor[i], OUTPUT);
@@ -31,11 +34,6 @@ int porcentagemPWM(float percentualPWM) {
   return valorPWM;
 }
 
-enum MotorDirection {
-  FORWARD,
-  BACKWARD,
-  STOP
-};
 
 
 

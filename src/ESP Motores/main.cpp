@@ -1,23 +1,7 @@
 #include <Arduino.h>
-#include <Motor.h>
-
-//VARIAVEIS GERAIS
-#define raio 11
+#include "Motor.h"
 
 
-//DEFINIR PORTAS MOTORES
-const int motor1Pin[] = {32, 33};
-const int motor2Pin[] = {27, 26};
-const int motor3Pin[] = {4, 0};
-
-//DEFINIR PORTAS PWM
-int const motoresPWM[] = {25, 14, 2};
-
-
-//DEFINIR VARIAVEIS PWM
-#define frequencia 20000
-#define resolution 8
-const int canais[] = {1, 2, 3};
 
 
 
