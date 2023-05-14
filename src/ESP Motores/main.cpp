@@ -1,9 +1,12 @@
 #include <Arduino.h>
 #include "Motor.h"
 
+float v1, v2, v3;
+float vx, vy, w;
 
-
-
+#define L 8//distance between robot's center and wheel's center
+#define sqrt3   1.732050807
+#define sqrt3_2 0.866025404
 
 void setup() {
   //CONFIGURANDO PWM
@@ -23,19 +26,19 @@ void loop() {
 
 }
 
+void inverseKinematics(float vx, float vy, float w) {
+    v1 = -((vx - sqrt3 * vy)/2) + L * w;
+    v2 = vx + w * L;
+    v3 = ((-vx + sqrt3 * vy)/2) + L * w;
+}
 
-//REGRA DE 3 PARA PWM (0-100/0-255)
+/*
 
 
-
-
-
-//FUNCOES DE MOVIMENTACAO
-
-
-/*OBS:
-
-73 é devido ao moveDiagonal pq 1.366 * 100 resultaria num valor maior que o ciclo máximo do pwm. Utilizando 73 como valor mínimo, resulta: 73*1.366 ~= 98.
-Não é a melhor solução mas como essa parte é só para testes vai funcionar.
-
+function inverseKinematics(vx, vy, w)
+    v1 = -(vx + math.sqrt(3) * vy) / 2 + L * w
+    v2 = vx + w * L
+    v3 = (-vx + math.sqrt(3) * vy) / 2 + L * w
+    return v1, v2, v3
+end
 */
