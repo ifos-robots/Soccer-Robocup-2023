@@ -57,17 +57,23 @@ int porcentagemPWM(float percentualPWM) {
   return valorPWM;
 }
 
+enum MotorDirection {
+  FORWARD,
+  BACKWARD,
+  STOP
+};
+
 //FUNCOES PARA DEFINIR A DIRECAO DA ROTACAO DO MOTOR
-void setDirection(bool direction,const int motorPin[]){
-    if (direction == 1) {
+void setDirection(MotorDirection direction,const int motorPin[]){
+    if (direction == FORWARD) {
         digitalWrite(motorPin[0], HIGH);
         digitalWrite(motorPin[1], LOW);
     }
-    else if (direction == -1) {
+    else if (direction == BACKWARD) {
         digitalWrite(motorPin[0], LOW);
         digitalWrite(motorPin[1], HIGH);
     }
-    else {
+    else if (direction == STOP)  {
         digitalWrite(motorPin[0], LOW);
         digitalWrite(motorPin[1], LOW);
     }
