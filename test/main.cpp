@@ -31,6 +31,10 @@ Ultrasonic ultraY1(25, 26);
 Ultrasonic ultraY2(32, 33);
 float distanceX1, distanceX2, distanceY1, distanceY2;
 
+//DEFINIR TAMANHO CAMPO
+const float campo[] = {93, 100};
+float x, y;
+
 void setup() {
   //CONFIGURANDO PWM
   pinMode(motorXPWM, OUTPUT);
@@ -59,31 +63,36 @@ void loop() {
   distanceY1 = ultraY1.read();
   distanceY2 = ultraY2.read();
 
+//MOVIMENTAÇAO ULTRASSONICO
+  float* coordenadas = getCordinates(distanceX1, distanceX2, distanceY1, distanceY2);
+  x = coordenadas[0];
+  y = coordenadas[1];
+  
+  if(x > campo[0] && y > campo[1]){
+    moveDiagonalRT();
+  }
+  else if(x = campo[0]){
+    moveForward();
+  }
 }
 
 //FUNCAO PARA CALCULAR AS COORDENADAS DO CAMPO
-float* getCordinates(float distanceX1, float distanceX2, float distanceY1, float distanceY2){
-  float x1 = (distanceX1 + RoboRaio);
-  float y1 = (distanceY1 + RoboRaio);
-  float x2 = (distanceX2 + RoboRaio);
-  float y2 = (distanceY2 + RoboRaio);
-
-  static float coordinates[2];
-
-  if(x1 > x2){
-    coordinates[0] = x1;
+float* getCordinates(float distance_X1, float distance_X2, float distance_Y1, float distance_Y2) {
+  float* coordinates = new float[2];
+  if(distance_X1 > distance_X2){
+    x = (distance_X1 + RoboRaio) - distance_X2;
   } else {
-    coordinates[0] = x2;
+    x = (distance_X2 + RoboRaio) - distance_X1;
   }
-  if(y1 > y2){
-    coordinates[1] = y1;
+  if(distance_Y1 > distance_Y2){
+    y = (distance_Y1 + RoboRaio) - distance_Y2;
   } else {
-    coordinates[1] = y2;
+    y = (distance_Y2 + RoboRaio) - distance_Y1;
   }
+  coordinates[0] = x;
+  coordinates[1] = y;
   return coordinates;
 }
-
-float* coordenadasRobo = getCordinates(distanceX1, distanceX2, distanceY1, distanceY2);
 
 //REGRA DE 3 PARA PWM (0-100/0-255)
 int porcentagemPWM(float percentualPWM) {
@@ -162,7 +171,7 @@ void moveDiagonalLF() {
   setDirectionMotorZ(1);
 }
 
-void turnLeft() {
+void moveLeft() {
   ledcWrite(motorXCanal, porcentagemPWM(100));
   ledcWrite(motorYCanal, porcentagemPWM(100));
   ledcWrite(motorZCanal, porcentagemPWM(100));
@@ -171,7 +180,7 @@ void turnLeft() {
   setDirectionMotorZ(1);
 }
 
-void turnRight() {
+void moveRight() {
   ledcWrite(motorXCanal, porcentagemPWM(100));
   ledcWrite(motorYCanal, porcentagemPWM(100));
   ledcWrite(motorZCanal, porcentagemPWM(100));
