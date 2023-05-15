@@ -12,6 +12,9 @@ void setupPins(const int motor[]);
 void setupPWM(const int motorCanal[], const int reso, const int freq);
 void setDirection(MotorDirection direction, const int motorPin[]);
 int porcentagemPWM(float percentualPWM);
+float calcDirection();
+
+
 void moveBackward();
 void moveDiagonalRT();
 void moveDiagonalLF();
