@@ -43,6 +43,6 @@ void loop() {
 void ultraRead() {
   for (int i = 0; i < 4; i++) {
     distances[i] = sensors[i].ultrasonic.read();
-    delay(100);
+    delay(40);
   }
 }
