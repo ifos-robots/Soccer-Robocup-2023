@@ -3,6 +3,7 @@
 
 //VARIÁVEIS GERAIS
 #define R 11
+float x, y;
 
 //VARIAVEIS ULTRASSONICOS - (TRIG, ECHO)
 Ultrasonic ultraNorth(27, 14);
@@ -10,7 +11,6 @@ Ultrasonic ultraSouth(14, 0);
 Ultrasonic ultraRight(25, 26);
 Ultrasonic ultraLeft(32, 33);
 float distanceNorth, distanceSouth, distanceRight, distanceLeft;
-float x, y;
 
 void setup() {
 
