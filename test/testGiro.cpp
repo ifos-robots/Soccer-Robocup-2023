@@ -1,6 +1,6 @@
 #include "MPU9250.h"
 #include <Arduino.h>
-
+#include <HardwareSerial.h>
 
 /*
     Usefull links:
@@ -10,6 +10,9 @@
 */
 
 
+HardwareSerial sender1Serial(2); // UART2
+#define SENDER1_TX_PIN 17
+#define SENDER1_RX_PIN 16
 
 MPU9250 mpu; 
 
@@ -19,7 +22,12 @@ void setup() {
     delay(2000);
 
     mpu.setup(0x68);  
+
+    sender1Serial.begin(9600, SERIAL_8N1, SENDER1_RX_PIN, SENDER1_TX_PIN);
+
+    
     /*
+    --Magnetic Declination
         IFPE Recife
         Latitude: 8° 3' 31" S
         Longitude: 325° 2' 59" E
@@ -40,15 +48,15 @@ void setup() {
         Device should be stay still during accel/gyro calibration.
         Round device around during mag calibration.
     */
-
-
-    //mpu.selectFilter
+                 
+    //Calibrate (Leave the gyro still for 5s and then make an "8" movement during calibrateMag)
     mpu.calibrateAccelGyro();
     mpu.calibrateMag();
 }
 
 void loop() {
     if (mpu.update()) {
-        Serial.print(mpu.getEulerZ()); Serial.print(", ");
+        //Serial.print(mpu.getEulerZ()); Serial.print(", ");
+        sender1Serial.print("[Orientação - Giro] " + String(mpu.getEulerZ()));
     }
 }
