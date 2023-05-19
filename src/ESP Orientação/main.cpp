@@ -42,7 +42,6 @@ MPU9250 mpu;
 void setup() {
     Serial.begin(115200);
     Wire.begin();
-    delay(2000);
 
     mpu.setup(0x68);  
 
@@ -64,7 +63,6 @@ void setup() {
     */
     mpu.setMagneticDeclination(-21.28); 
     mpu.setFilterIterations(10); //Generally 10-20 is good for stable yaw estimation
-    delay(2000);
 
 
     /*  need to set all offsets at every bootup by yourself (or calibrate at every bootup).
@@ -75,6 +73,7 @@ void setup() {
     //Calibrate (Leave the gyro still for 5s and then make an "8" movement during calibrateMag)
     mpu.calibrateAccelGyro();
     mpu.calibrateMag();
+    delay(2000);
 }
 
 
@@ -92,7 +91,6 @@ void loop() {
   // CÁLCULO DAS COORDENADAS USANDO TRIÂNGULAÇÃO
     x = (C * E - F * B) / (A * E - D * B);
     y = (C * D - F * A) / (B * D - E * A);
-  delay(1000); //precisa?
 
   // Envia dados pela serial
     sender1Serial.print("[Orientação - Ultra];" + String(x) + ";" + String(y));
@@ -101,7 +99,7 @@ void loop() {
         //Serial.print(mpu.getEulerZ()); Serial.print(", ");
         sender1Serial.print("[Orientação - Giro];" + String(mpu.getEulerZ()));
     }
-
+delay(50);
 }
 
 // FUNÇÃO PARA LEITURA DOS ULTRASSONICOS
