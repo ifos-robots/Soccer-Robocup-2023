@@ -73,7 +73,6 @@ void setup() {
     //Calibrate (Leave the gyro still for 5s and then make an "8" movement during calibrateMag)
     mpu.calibrateAccelGyro();
     mpu.calibrateMag();
-    delay(2000);
 }
 
 
