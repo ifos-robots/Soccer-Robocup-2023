@@ -1,4 +1,3 @@
-#include <Arduino.h>
 #include "Motor.h"
 #include <HardwareSerial.h>
 
@@ -131,7 +130,7 @@ MotorDirection direction(float vel){
     }
 }
 
-void inverseKinematics(float radius, float theta, float eulerY){
+void inverseKinematics(float radius, float theta, float w){
     float vx = radius * cos(theta);
     float vy = radius * sin(theta);
     float w = eulerY;
