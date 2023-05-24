@@ -97,7 +97,7 @@ void loop(){
 
         
     }
-    inverseKinematics(vectorRTWithSma.radius, vectorRTWithSma.theta, eulerY); // FUNÇOES DO IR PRA CALCULAR VEL E DIREC
+    inverseKinematics(vectorRTWithSma.theta, w); // FUNÇOES DO IR PRA CALCULAR VEL E DIREC
 }
 
 // 255 --- 1600 RPM
@@ -130,7 +130,7 @@ MotorDirection direction(float vel){
     }
 }
 
-void inverseKinematics(float radius, float theta, float w){
+void inverseKinematics(float theta, float w){  //MUDAR RADIUS PARA UM VALOR FIXO MÍNIMO
     float vx = radius * cos(theta);
     float vy = radius * sin(theta);
 
