@@ -133,7 +133,6 @@ MotorDirection direction(float vel){
 void inverseKinematics(float radius, float theta, float w){
     float vx = radius * cos(theta);
     float vy = radius * sin(theta);
-    float w = eulerY;
 
     v1 = -((vx - sqrt3 * vy) / 2) + L * w;
     v2 = vx + w * L;
