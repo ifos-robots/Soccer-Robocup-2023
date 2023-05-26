@@ -3,6 +3,13 @@
 #include <HardwareSerial.h>
 
 
+//PID
+float desiredYaw = 0;
+float kp; float ki; float kd;
+float previousError;
+float integral;
+float ANGLE_THRESHOLD = 5;
+
 
 // Receiver
 HardwareSerial receiverSerial(2); // UART2
@@ -54,7 +61,7 @@ void processReceivedData(const std::string& sender,const std::string& data){
 
             std::string eulerY_ = data.substr(pos + 1, data.find("/"));
 
-            //convert angle to float
+            //convert angle(string) to float
             eulerY = std::stof(eulerY_);
 
             Serial.print("Received from Sender 2: ");
@@ -66,11 +73,6 @@ void processReceivedData(const std::string& sender,const std::string& data){
 
 void loop(){
 
-    float alpha = calcDirection();
-    vx = cos(alpha);
-    vy = sin(alpha);
-    inverseKinematics(vx, vy, 0);
-    move(v1, v2, v3);
 
     if (receiverSerial.available()){
         /*
@@ -98,6 +100,47 @@ void loop(){
 
         
     }
+
+    float alpha = calcDirection();
+    vx = cos(alpha);
+    vy = sin(alpha);
+    float v = sqrt(pow(vx, 2) + pow(vy, 2));
+     
+    inverseKinematics(vx, vy, 0);
+    move(v1, v2, v3);
+
+
+
+
+
+    //PID Control for angle
+
+
+    double angleError = eulerY - desiredYaw;
+
+    // Compute PID terms for angle control
+    integral += angleError;
+    double anglePTerm = kp * angleError;
+    double angleITerm = ki * integral;
+    double angleDTerm = kd * (angleError - previousError);
+
+    // Compute motor speeds only when angle correction is necessary
+    if (abs(angleError) > ANGLE_THRESHOLD) {
+        // Compute motor speeds by adjusting the throttle for angle control
+        double PIDSpeed =  anglePTerm + angleITerm + angleDTerm;
+
+
+        if (PIDSpeed > 255){
+            PIDSpeed = 255;
+        }
+        
+        ledcWrite(canais[0], PIDSpeed);
+        ledcWrite(canais[1], PIDSpeed);
+        ledcWrite(canais[2], PIDSpeed);
+
+        previousError = angleError;
+    }
+    
 }
 
 // 255 --- 1600 RPM
