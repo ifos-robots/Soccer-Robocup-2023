@@ -13,20 +13,23 @@ void setupPWM(const int motorCanal[], const int reso, const int freq){
         }
 }
 
-//FUNCOES PARA DEFINIR A DIRECAO DA ROTACAO DO MOTOR
-void setDirection(MotorDirection direction,const int motorPin[]){
-    if (direction == FORWARD) {
+//Define motor direction
+void setDirection(int direction, const int motorPin[]){
+  
+  switch (direction){
+    case 1:
         digitalWrite(motorPin[0], HIGH);
         digitalWrite(motorPin[1], LOW);
-    }
-    else if (direction == BACKWARD) {
+    
+    case -1:
         digitalWrite(motorPin[0], LOW);
         digitalWrite(motorPin[1], HIGH);
-    }
-    else if (direction == STOP)  {
+    
+    case 0:
         digitalWrite(motorPin[0], LOW);
         digitalWrite(motorPin[1], LOW);
-    }
+    
+  }
 }
 
 int porcentagemPWM(float percentualPWM) {
@@ -42,9 +45,9 @@ void moveForward() {
   ledcWrite(canais[1], porcentagemPWM(0));
   ledcWrite(canais[2], porcentagemPWM(73*0.866));
 
-  setDirection(BACKWARD, motor1Pin);
-  setDirection(STOP, motor2Pin);
-  setDirection(FORWARD, motor3Pin);
+  setDirection(-1, motor1Pin);
+  setDirection(0, motor2Pin);
+  setDirection(1, motor3Pin);
 
 }
 
@@ -52,73 +55,74 @@ void moveBackward() {
   ledcWrite(canais[0], porcentagemPWM(73*0.866));
   ledcWrite(canais[1], porcentagemPWM(0));
   ledcWrite(canais[2], porcentagemPWM(73*0.866));
-  setDirection(FORWARD, motor1Pin);
-  setDirection(STOP, motor2Pin);
-  setDirection(BACKWARD, motor3Pin);
+
+  setDirection(1, motor1Pin);
+  setDirection(0, motor2Pin);
+  setDirection(-1, motor3Pin);
 }
 
 void moveDiagonalRT() {
   ledcWrite(canais[0], porcentagemPWM(73));
   ledcWrite(canais[1], porcentagemPWM(73));
   ledcWrite(canais[2], porcentagemPWM(73));
-  setDirection(FORWARD, motor1Pin);
-  setDirection(FORWARD, motor2Pin);
-  setDirection(FORWARD, motor3Pin);
+  setDirection(1, motor1Pin);
+  setDirection(1, motor2Pin);
+  setDirection(1, motor3Pin);
 }
 //Move na diagonal para esquerda ou direita
 void moveDiagonalLF() {
   ledcWrite(canais[0], porcentagemPWM(73*0.366));
   ledcWrite(canais[1], porcentagemPWM(73));
   ledcWrite(canais[2], porcentagemPWM(73));
-  setDirection(FORWARD, motor1Pin);
-  setDirection(FORWARD, motor2Pin);
-  setDirection(FORWARD, motor3Pin);
+  setDirection(1, motor1Pin);
+  setDirection(1, motor2Pin);
+  setDirection(1, motor3Pin);
 }
 
 void turnLeft() {
   ledcWrite(canais[0], porcentagemPWM(73*0.5));
   ledcWrite(canais[1], porcentagemPWM(73));
   ledcWrite(canais[2], porcentagemPWM(73*0.5));
-  setDirection(FORWARD, motor1Pin);
-  setDirection(BACKWARD, motor2Pin);
-  setDirection(FORWARD, motor3Pin);
+  setDirection(1, motor1Pin);
+  setDirection(-1, motor2Pin);
+  setDirection(1, motor3Pin);
 }
 
 void turnRight() {
   ledcWrite(canais[0], porcentagemPWM(73*0.5));
   ledcWrite(canais[1], porcentagemPWM(73));
   ledcWrite(canais[2], porcentagemPWM(73*0.5));
-  setDirection(BACKWARD, motor1Pin);
-  setDirection(FORWARD, motor2Pin);
-  setDirection(BACKWARD, motor3Pin);
+  setDirection(-1, motor1Pin);
+  setDirection(1, motor2Pin);
+  setDirection(-1, motor3Pin);
 }
 
 void rotationLeft() {
   ledcWrite(canais[0], porcentagemPWM(73));
   ledcWrite(canais[1], porcentagemPWM(73));
   ledcWrite(canais[2], porcentagemPWM(73));
-  setDirection(FORWARD, motor1Pin);
-  setDirection(FORWARD, motor2Pin);
-  setDirection(FORWARD, motor3Pin);
+  setDirection(1, motor1Pin);
+  setDirection(1, motor2Pin);
+  setDirection(1, motor3Pin);
 }
 
 void rotationRight() {
   ledcWrite(canais[0], porcentagemPWM(73));
   ledcWrite(canais[1], porcentagemPWM(73));
   ledcWrite(canais[2], porcentagemPWM(73));
-  setDirection(BACKWARD, motor1Pin);
-  setDirection(BACKWARD, motor2Pin);
-  setDirection(BACKWARD, motor3Pin);
+  setDirection(-1, motor1Pin);
+  setDirection(-1, motor2Pin);
+  setDirection(-1, motor3Pin);
 }
 
-void stop() {
+void STOP() {
   ledcWrite(canais[0], porcentagemPWM(0));
   ledcWrite(canais[1], porcentagemPWM(0));
   ledcWrite(canais[2], porcentagemPWM(0));
 
-  setDirection(FORWARD, motor1Pin);
-  setDirection(FORWARD, motor2Pin);
-  setDirection(FORWARD, motor3Pin);
+  setDirection(1, motor1Pin);
+  setDirection(1, motor2Pin);
+  setDirection(1, motor3Pin);
 }
 
 

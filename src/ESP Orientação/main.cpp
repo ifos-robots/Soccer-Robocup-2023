@@ -1,5 +1,5 @@
 //BIBLIOTECAS
-#include <Ultrasonic.h>
+#include "Ultrasonic.h"
 #include "MPU9250.h"
 #include <Arduino.h>
 #include <HardwareSerial.h>
@@ -12,18 +12,18 @@
 */
 
 
-//VARIÁVEIS GERAIS ULTRASSONICO
+//Ultrassonic Variables
 #define R 11
 float x, y;
 float distances[4];
 
-struct UltrasonicSensor {
+struct UltrasonicSensor { 
   Ultrasonic ultrasonic;
   float x;
   float y;
 };
 
-//DEFINIÇÃO DE SENSORES ULTRASSONICOS E SUAS VARIÁVEIS
+//Ultrassonic and Variables
 UltrasonicSensor sensors[] = {
   { Ultrasonic(27, 14), 0, R },    // Sensor North
   { Ultrasonic(14, 0), 0, -R },    // Sensor South
@@ -31,7 +31,7 @@ UltrasonicSensor sensors[] = {
   { Ultrasonic(32, 33), -R, 0 },   // Sensor West/Left
 };
 
-//VARIAVEIS GERAIS MPU9250
+//MPU Variables
 HardwareSerial sender1Serial(2); // UART2
 #define SENDER1_TX_PIN 17
 #define SENDER1_RX_PIN 16
@@ -75,6 +75,7 @@ void setup() {
     mpu.calibrateMag();
 }
 
+using namespace std;
 
 void loop() {
     ultraRead();
@@ -98,7 +99,7 @@ void loop() {
         //Serial.print(mpu.getEulerZ()); Serial.print(", ");
         sender1Serial.print("[Orientação - Giro];" + String(mpu.getEulerZ()));
     }
-delay(50);
+  delay(50);
 }
 
 // FUNÇÃO PARA LEITURA DOS ULTRASSONICOS

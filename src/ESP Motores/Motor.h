@@ -10,11 +10,10 @@ enum MotorDirection {
 
 void setupPins(const int motor[]);
 void setupPWM(const int motorCanal[], const int reso, const int freq);
-void setDirection(MotorDirection direction, const int motorPin[]);
+void setDirection(int direction, const int motorPin[]);
 int porcentagemPWM(float percentualPWM);
-float calcDirection();
 
-
+void moveForward();
 void moveBackward();
 void moveDiagonalRT();
 void moveDiagonalLF();
@@ -38,7 +37,7 @@ int const motoresPWM[] = {25, 14, 2};
 
 
 //DEFINIR VARIAVEIS PWM
-#define frequencia 20000
+#define freqPWM 20000
 #define resolution 8
 const int canais[] = {1, 2, 3};
 

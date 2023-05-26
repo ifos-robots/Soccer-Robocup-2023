@@ -1,4 +1,14 @@
 //CLASSE PARA CALCULAR A MÉDIA DA MOVIMENTAÇÃO DO ROBÔ
+
+#include <Arduino.h>
+
+
+// Sender 2
+HardwareSerial sender2Serial(1); // UART1
+#define SENDER2_TX_PIN 4
+#define SENDER2_RX_PIN 5
+
+
 class MovingAverage{
   private:
     float* dataArray;
@@ -53,6 +63,17 @@ vectorRT_t calcRTfromXY(vectorXY_t *vectorXY_p);
 
 void setup() {
   Serial.begin(115200);
+
+    //Sender 2
+
+    sender2Serial.begin(9600, SERIAL_8N1, SENDER2_RX_PIN, SENDER2_TX_PIN);
+    /*
+    SERIAL_8N1: 
+        8: 8 bits per byte
+        N: No parity
+        1: One stop bit
+    */
+
   setIRPinsInput();
 }
 
@@ -82,6 +103,11 @@ void loop() {
     Serial.print(millis());
     Serial.print("\n");
   }
+
+
+    //Sender 2
+    sender2Serial.print("[Infravermelhos];"+String(vectorRTWithSma.radius)+";"+String(vectorRTWithSma.theta));
+
 }
 
 //FUNÇÃO PARA PRINTAR AS LARGURAS DE PULSO DE CADA IR
