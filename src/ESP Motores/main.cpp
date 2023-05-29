@@ -1,29 +1,6 @@
 #include "Motor.h"
-#include <HardwareSerial.h>
 
 
-
-// Receiver
-HardwareSerial receiverSerial(2); // UART2
-#define RECEIVER_TX_PIN 17
-#define RECEIVER_RX_PIN 16
-
-
-// Movimentation Variables
-float v1, v2, v3;
-float vx, vy, w;
-float minMagnitude = 2;
-
-#define L 8 // distance between robot's center and wheel's center
-#define r 4 // wheel's radius
-#define sqrt3 1.732050807
-#define sqrt3_2 0.866025404
-
-float x; float y;
-float eulerY;
-float theta; float radius;
-
-int scalingFactor = 255;
 
 void setup(){
     // Serial Communication
