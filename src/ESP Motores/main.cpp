@@ -18,8 +18,6 @@ void setup(){
 }
 
  
-/*The purpose of '&' character is to indicate that the constants 'sender' and 'data' are references, avoiding unnecessary copying of the variables
-*/
 
 
 void loop(){

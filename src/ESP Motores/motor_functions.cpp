@@ -69,7 +69,11 @@ void inverseKinematics(float theta, float w){
     PWM(v1, v2, v3); //Function that moves the robot based on the speed of each motor
 }
 
+
 void processReceivedData(const std::string& sender,const std::string& data){
+  /*The purpose of '&' character is to indicate that the constants 'sender' and 'data' are references, avoiding unnecessary copying of the variables
+  */
+ 
     int pos = data.find(';');
     if (sender == "[Orientação - Ultra]"){
             std::string x_ = data.substr(0, pos);
