@@ -1,7 +1,7 @@
 //include guards
 #ifndef MOTOR_H
 
-#define MOTO_H
+#define MOTOR_H
 #include <HardwareSerial.h>
 #include <Arduino.h>
 
@@ -12,6 +12,13 @@ enum MotorDirection {
   BACKWARD,
   STOP
 };
+
+//PID
+float desiredYaw = 0;
+float kp; float ki; float kd;
+float previousError;
+float integral;
+float ANGLE_THRESHOLD = 5;
 
 void setupPins(const int motor[]);
 void setupPWM(const int motorCanal[], const int reso, const int freq);
@@ -60,6 +67,7 @@ HardwareSerial receiverSerial(2); // UART2
 // Movimentation Variables
 float v1, v2, v3;
 float vx, vy, w;
+int Dir1, Dir2, Dir3;
 float minMagnitude = 2;
 
 #define L 8 // distance between robot's center and wheel's center

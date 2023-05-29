@@ -6,7 +6,7 @@ void setupPins(const int motor[]){
           pinMode(motor[i], OUTPUT);
         }
 }
-void setupPWM(const int motorCanal[], const int reso, const int freq){
+void setupmovePWM(const int motorCanal[], const int reso, const int freq){
         for (int i = 0; i < 3; i++){
           ledcSetup(motorCanal[i], freq, reso);
           ledcAttachPin(motorCanal[i], i+1);
@@ -17,33 +17,37 @@ void setupPWM(const int motorCanal[], const int reso, const int freq){
 void setDirection(int direction, const int motorPin[]){
   
   switch (direction){
+
     case 1:
         digitalWrite(motorPin[0], HIGH);
         digitalWrite(motorPin[1], LOW);
+    break;
     
     case -1:
         digitalWrite(motorPin[0], LOW);
         digitalWrite(motorPin[1], HIGH);
-    
+    break;
+
     case 0:
         digitalWrite(motorPin[0], LOW);
         digitalWrite(motorPin[1], LOW);
-    
+    break;
+
   }
 }
 
 // 255 --- 1600 RPM
 
-void PWM(float v1, float v2, float v3){
+void movePWM(float v1, float v2, float v3){
 
-    int Dir1 = (v1 > 0) - (v1 < 0);   // returns -1 or 1
-    int Dir2 = (v2 > 0) - (v2 < 0);
-    int Dir3 = (v3 > 0) - (v3 < 0);
+    Dir1 = (v1 > 0) - (v1 < 0);   // returns -1 or 1
+    Dir2 = (v2 > 0) - (v2 < 0);
+    Dir3 = (v3 > 0) - (v3 < 0);
 
     // reescale values from -5 to 5 to 0 to 255
-    int v1 = static_cast<int>(abs((v1 / radius) * scalingFactor));
-    int v2 = static_cast<int>(abs((v2 / radius) * scalingFactor));
-    int v3 = static_cast<int>(abs((v3 / radius) * scalingFactor));
+    v1 = static_cast<int>(abs((v1 / radius) * scalingFactor));
+    v2 = static_cast<int>(abs((v2 / radius) * scalingFactor));
+    v3 = static_cast<int>(abs((v3 / radius) * scalingFactor));
 
     ledcWrite(canais[0], v1);
     ledcWrite(canais[1], v2);
@@ -58,15 +62,15 @@ void PWM(float v1, float v2, float v3){
 }
 
 void inverseKinematics(float theta, float w){  
-    float vx = radius * cos(theta);
-    float vy = radius * sin(theta);
+    vx = radius * cos(theta);
+    vy = radius * sin(theta);
 
     v1 = -((vx - sqrt3 * vy) / 2) + L * w;
     v2 = vx + w * L;
     v3 = ((-vx + sqrt3 * vy) / 2) + L * w;
 
 
-    PWM(v1, v2, v3); //Function that moves the robot based on the speed of each motor
+    movePWM(v1, v2, v3); //Function that moves the robot based on the speed of each motor
 }
 
 
@@ -110,18 +114,18 @@ void processReceivedData(const std::string& sender,const std::string& data){
 }
 
 
-int porcentagemPWM(float percentualPWM) {
-  int valorPWM = (percentualPWM * 255) / 100;
-  return valorPWM;
+int scalePWM(float percentualmovePWM) {
+  int valormovePWM = (percentualmovePWM * 255) / 100;
+  return valormovePWM;
 }
 
 
 
 
 void moveForward() {
-  ledcWrite(canais[0], porcentagemPWM(73*0.866));
-  ledcWrite(canais[1], porcentagemPWM(0));
-  ledcWrite(canais[2], porcentagemPWM(73*0.866));
+  ledcWrite(canais[0], scalePWM(73*0.866));
+  ledcWrite(canais[1], scalePWM(0));
+  ledcWrite(canais[2], scalePWM(73*0.866));
 
   setDirection(-1, motor1Pin);
   setDirection(0, motor2Pin);
@@ -130,9 +134,9 @@ void moveForward() {
 }
 
 void moveBackward() {
-  ledcWrite(canais[0], porcentagemPWM(73*0.866));
-  ledcWrite(canais[1], porcentagemPWM(0));
-  ledcWrite(canais[2], porcentagemPWM(73*0.866));
+  ledcWrite(canais[0], scalePWM(73*0.866));
+  ledcWrite(canais[1], scalePWM(0));
+  ledcWrite(canais[2], scalePWM(73*0.866));
 
   setDirection(1, motor1Pin);
   setDirection(0, motor2Pin);
@@ -140,63 +144,63 @@ void moveBackward() {
 }
 
 void moveDiagonalRT() {
-  ledcWrite(canais[0], porcentagemPWM(73));
-  ledcWrite(canais[1], porcentagemPWM(73));
-  ledcWrite(canais[2], porcentagemPWM(73));
+  ledcWrite(canais[0], scalePWM(73));
+  ledcWrite(canais[1], scalePWM(73));
+  ledcWrite(canais[2], scalePWM(73));
   setDirection(1, motor1Pin);
   setDirection(1, motor2Pin);
   setDirection(1, motor3Pin);
 }
 //Move na diagonal para esquerda ou direita
 void moveDiagonalLF() {
-  ledcWrite(canais[0], porcentagemPWM(73*0.366));
-  ledcWrite(canais[1], porcentagemPWM(73));
-  ledcWrite(canais[2], porcentagemPWM(73));
+  ledcWrite(canais[0], scalePWM(73*0.366));
+  ledcWrite(canais[1], scalePWM(73));
+  ledcWrite(canais[2], scalePWM(73));
   setDirection(1, motor1Pin);
   setDirection(1, motor2Pin);
   setDirection(1, motor3Pin);
 }
 
 void turnLeft() {
-  ledcWrite(canais[0], porcentagemPWM(73*0.5));
-  ledcWrite(canais[1], porcentagemPWM(73));
-  ledcWrite(canais[2], porcentagemPWM(73*0.5));
+  ledcWrite(canais[0], scalePWM(73*0.5));
+  ledcWrite(canais[1], scalePWM(73));
+  ledcWrite(canais[2], scalePWM(73*0.5));
   setDirection(1, motor1Pin);
   setDirection(-1, motor2Pin);
   setDirection(1, motor3Pin);
 }
 
 void turnRight() {
-  ledcWrite(canais[0], porcentagemPWM(73*0.5));
-  ledcWrite(canais[1], porcentagemPWM(73));
-  ledcWrite(canais[2], porcentagemPWM(73*0.5));
+  ledcWrite(canais[0], scalePWM(73*0.5));
+  ledcWrite(canais[1], scalePWM(73));
+  ledcWrite(canais[2], scalePWM(73*0.5));
   setDirection(-1, motor1Pin);
   setDirection(1, motor2Pin);
   setDirection(-1, motor3Pin);
 }
 
 void rotationLeft() {
-  ledcWrite(canais[0], porcentagemPWM(73));
-  ledcWrite(canais[1], porcentagemPWM(73));
-  ledcWrite(canais[2], porcentagemPWM(73));
+  ledcWrite(canais[0], scalePWM(73));
+  ledcWrite(canais[1], scalePWM(73));
+  ledcWrite(canais[2], scalePWM(73));
   setDirection(1, motor1Pin);
   setDirection(1, motor2Pin);
   setDirection(1, motor3Pin);
 }
 
 void rotationRight() {
-  ledcWrite(canais[0], porcentagemPWM(73));
-  ledcWrite(canais[1], porcentagemPWM(73));
-  ledcWrite(canais[2], porcentagemPWM(73));
+  ledcWrite(canais[0], scalePWM(73));
+  ledcWrite(canais[1], scalePWM(73));
+  ledcWrite(canais[2], scalePWM(73));
   setDirection(-1, motor1Pin);
   setDirection(-1, motor2Pin);
   setDirection(-1, motor3Pin);
 }
 
-void STOP() {
-  ledcWrite(canais[0], porcentagemPWM(0));
-  ledcWrite(canais[1], porcentagemPWM(0));
-  ledcWrite(canais[2], porcentagemPWM(0));
+void stop() {
+  ledcWrite(canais[0], scalePWM(0));
+  ledcWrite(canais[1], scalePWM(0));
+  ledcWrite(canais[2], scalePWM(0));
 
   setDirection(1, motor1Pin);
   setDirection(1, motor2Pin);
@@ -207,7 +211,7 @@ void STOP() {
 
 /*OBS:
 
-73 é devido ao moveDiagonal pq 1.366 * 100 resultaria num valor maior que o ciclo máximo do pwm. Utilizando 73 como valor mínimo, resulta: 73*1.366 ~= 98.
+73 é devido ao moveDiagonal pq 1.366 * 100 resultaria num valor maior que o ciclo máximo do movePWM. Utilizando 73 como valor mínimo, resulta: 73*1.366 ~= 98.
 Não é a melhor solução mas como essa parte é só para testes vai funcionar.
 
 */
