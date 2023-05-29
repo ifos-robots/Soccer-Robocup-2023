@@ -5,6 +5,8 @@
 #include <HardwareSerial.h>
 #include <Arduino.h>
 
+using namespace std;
+
 enum MotorDirection {
   FORWARD,
   BACKWARD,
@@ -14,7 +16,12 @@ enum MotorDirection {
 void setupPins(const int motor[]);
 void setupPWM(const int motorCanal[], const int reso, const int freq);
 void setDirection(int direction, const int motorPin[]);
+void processReceivedData(const std::string& sender,const std::string& data);
+void PWM(float v1, float v2, float v3);
+void inverseKinematics(float theta, float w);
+
 int porcentagemPWM(float percentualPWM);
+
 
 void moveForward();
 void moveBackward();
