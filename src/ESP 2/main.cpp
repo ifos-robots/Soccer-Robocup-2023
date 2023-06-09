@@ -1,6 +1,10 @@
 //BIBLIOTECAS
 
 #include "orientation.h"
+#include "sensor_control.h"
+#include "moving_average.h"
+#define T_MODEA 833
+
 /*
     Usefull links:
     https://en.wikipedia.org/wiki/Magnetic_declination
@@ -9,13 +13,20 @@
 */
 
 
+MovingAverage smaForRadius(20);
+MovingAverage smaForTheta(20);
+
+unsigned long time_ms = 0;
 
 
 
 void setup() {
     Serial.begin(115200);
-    Wire.begin();
+    setAllSensorPinsInput();
 
+    Wire.begin();
+    
+    //MPU9250
     mpu.setup(0x68);  
 
     sender1Serial.begin(9600, SERIAL_8N1, SENDER1_RX_PIN, SENDER1_TX_PIN);
@@ -51,6 +62,24 @@ void setup() {
 using namespace std;
 
 void loop() {
+
+  //Calculate Theta and Radius
+    float           pulseWidth[IR_NUM]; // Variables to store pulse widths
+    sensorInfo_t    sensorInfo;         // Experimental measurement data (can be ignored if only using vectors)
+    vectorXY_t      vectorXY;           // Vector in Cartesian coordinate system
+    vectorRT_t      vectorRT;           // Vector in polar coordinate system
+    vectorRT_t      vectorRTWithSma;    // Vector in polar coordinate system with applied moving average
+
+    sensorInfo  = getAllSensorPulseWidth(pulseWidth, T_MODEA); // Read pulse widths from sensors
+    vectorXY    = calcVectorXYFromPulseWidth(pulseWidth); // Calculate vector components from pulse widths
+    vectorRT    = calcRTfromXY(&vectorXY); // Convert vector from Cartesian to polar coordinates
+
+    vectorRTWithSma.theta   = smaForTheta.updateData(vectorRT.theta); // Apply moving average to theta component
+    vectorRTWithSma.radius  = smaForRadius.updateData(vectorRT.radius); // Apply moving average to radius component
+
+
+
+
     ultraRead();
 
   // CÁLCULO DAS COORDENADAS DO ROBÔ
@@ -66,6 +95,8 @@ void loop() {
     y = (C * D - F * A) / (B * D - E * A);
 
   // Envia dados pela serial
+    sender1Serial.print("[Infravermelhos];"+String(vectorRTWithSma.radius)+";"+String(vectorRTWithSma.theta));
+
     sender1Serial.print("[Orientação - Ultra];" + String(x) + ";" + String(y));
 
     if (mpu.update()) {

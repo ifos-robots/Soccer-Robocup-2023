@@ -71,7 +71,7 @@ int Dir1, Dir2, Dir3;
 float minMagnitude = 2;
 
 #define L 8 // distance between robot's center and wheel's center
-#define r 4 // wheel's radius
+#define R 4 // wheel's radius
 #define sqrt3 1.732050807
 #define sqrt3_2 0.866025404
 

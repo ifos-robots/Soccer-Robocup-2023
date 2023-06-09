@@ -5,7 +5,7 @@
 #include "MPU9250.h"
 #include <Arduino.h>
 #include <HardwareSerial.h>
-
+          
 //Ultrassonic Variables
 #define R 11
 float x, y;
