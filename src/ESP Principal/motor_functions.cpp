@@ -6,12 +6,13 @@ void setupPins(const int motor[]){
           pinMode(motor[i], OUTPUT);
         }
 }
-void setupmovePWM(const int motorCanal[], const int reso, const int freq){
+void setupPWM(const int motorCanal[], const int reso, const int freq){
         for (int i = 0; i < 3; i++){
           ledcSetup(motorCanal[i], freq, reso);
           ledcAttachPin(motorCanal[i], i+1);
         }
 }
+
 
 //Define motor direction
 void setDirection(int direction, const int motorPin[]){
@@ -38,8 +39,13 @@ void setDirection(int direction, const int motorPin[]){
 
 // 255 --- 1600 RPM
 
-void movePWM(float v1, float v2, float v3){
+void moveRobot(float vx, float vy){
 
+    v1 = -((vx - sqrt3 * vy) / 2) + L * w;
+    v2 = vx + w * L;
+    v3 = ((-vx + sqrt3 * vy) / 2) + L * w;
+
+    // set direction
     Dir1 = (v1 > 0) - (v1 < 0);   // returns -1 or 1
     Dir2 = (v2 > 0) - (v2 < 0);
     Dir3 = (v3 > 0) - (v3 < 0);
@@ -65,13 +71,10 @@ void inverseKinematics(float theta, float w){
     vx = radius * cos(theta);
     vy = radius * sin(theta);
 
-    v1 = -((vx - sqrt3 * vy) / 2) + L * w;
-    v2 = vx + w * L;
-    v3 = ((-vx + sqrt3 * vy) / 2) + L * w;
+    moveRobot(vx, vy);
 
-
-    movePWM(v1, v2, v3); //Function that moves the robot based on the speed of each motor
 }
+
 
 
 void processReceivedData(const std::string& sender,const std::string& data){

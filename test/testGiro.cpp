@@ -1,6 +1,5 @@
 #include "MPU9250.h"
 #include <Arduino.h>
-#include <HardwareSerial.h>
 
 /*
     Usefull links:
@@ -23,7 +22,6 @@ void setup() {
 
     mpu.setup(0x68);  
 
-    sender1Serial.begin(9600, SERIAL_8N1, SENDER1_RX_PIN, SENDER1_TX_PIN);
 
     
     /*
@@ -57,6 +55,6 @@ void setup() {
 void loop() {
     if (mpu.update()) {
         //Serial.print(mpu.getEulerZ()); Serial.print(", ");
-        sender1Serial.print("[Orientação - Giro] " + String(mpu.getEulerZ()));
+        Serial.println(mpu.getEulerZ());
     }
 }
