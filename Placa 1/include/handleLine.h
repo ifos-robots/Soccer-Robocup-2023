@@ -4,18 +4,17 @@
 #include <Arduino.h>
 #include "Adafruit_TCS34725.h"
 
-uint16_t r1, g1, b1, c1;
-uint16_t r2, g2, b2, c2;
-uint16_t r3, g3, b3, c3;
-
-#define WHITE_COLOR_THRESHOLD 200
+extern uint16_t r1, g1, b1, c1;
+extern uint16_t r2, g2, b2, c2;
+extern uint16_t r3, g3, b3, c3;
 
 
-Adafruit_TCS34725 tcs1;
-Adafruit_TCS34725 tcs2;
-Adafruit_TCS34725 tcs3;
 
-bool s1; bool s2; bool s3;
+#define WHITE_COLOR_THRESHOLD 500
+
+
+extern bool s1;extern bool s2;extern bool s3;
+
 enum LineState { NONE, LEFT, RIGHT, FRONT, BACK };
 void correctRobotDirection(LineState lineState);
 LineState checkLineState();

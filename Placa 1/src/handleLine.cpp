@@ -3,24 +3,9 @@
 #include "Motor.h"
 #include "handleLine.h"
 
-
-
-
-
-
-/* Initialise with specific int time and gain values */
-Adafruit_TCS34725 tcs1 = Adafruit_TCS34725(TCS34725_INTEGRATIONTIME_540MS, TCS34725_GAIN_1X);
-Adafruit_TCS34725 tcs2 = Adafruit_TCS34725(TCS34725_INTEGRATIONTIME_540MS, TCS34725_GAIN_1X);
-Adafruit_TCS34725 tcs3 = Adafruit_TCS34725(TCS34725_INTEGRATIONTIME_540MS, TCS34725_GAIN_1X);
-
-
-// Select I2C BUS
-void TCA9548A(uint8_t bus){
-  Wire.beginTransmission(0x70);  // TCA9548A address
-  Wire.write(1 << bus);          // send byte to select bus
-  Wire.endTransmission();
-}
-
+uint16_t r1, g1, b1, c1;
+uint16_t r2, g2, b2, c2;
+uint16_t r3, g3, b3, c3;
 
 void correctRobotDirection(LineState lineState) {
     switch (lineState) {
@@ -49,6 +34,7 @@ void correctRobotDirection(LineState lineState) {
     }
 }
 
+
 LineState checkLineState() {
     s1 = checkSensor(r1, g1, b1);
     s2 = checkSensor(r2, g2, b2);
@@ -66,6 +52,9 @@ LineState checkLineState() {
     else if (s3 && s2){
         return LineState::BACK;
     }
+
+    return LineState::NONE;
+
 }
 
 //Check if a sensor is detecting a line (white color)
